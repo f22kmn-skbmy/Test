@@ -211,9 +211,14 @@ function updateMap() {
   const key = normalizeKey(query);
   const info = locationInfo[key] || { address: "Address not found." };
 
-  const fullSearchQuery = encodeURIComponent(`${query} ${info.address}`);
-  document.getElementById("map-frame").src = `https://maps.google.com/maps?q=${fullSearchQuery}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
+  // Use the 'embed' specific endpoint which is more stable on mobile
+  const encodedQuery = encodeURIComponent(`${query} ${info.address}`);
+  const mapUrl = `https://maps.google.com/maps?q=${encodedQuery}&t=&z=17&ie=UTF8&iwloc=&output=embed`;
+  
+  const mapFrame = document.getElementById("map-frame");
+  mapFrame.src = mapUrl;
 
+  // Update Info Box
   document.getElementById("info-box").innerHTML = `
     <strong>Location:</strong><br>
     ${query}<br><br>
